@@ -1,0 +1,30 @@
+# Terraform: estado, planes y carpeta local de proveedores
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.tfvars
+*.tfvars.json
+
+# Credenciales y secretos
+.aws/
+credentials
+*.pem
+*.key
+.env
+.env.*
+*accessKeys*.csv
+*_credentials.csv
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.vscode/
+__pycache__/
