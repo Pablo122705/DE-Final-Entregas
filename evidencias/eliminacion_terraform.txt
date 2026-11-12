@@ -286,3 +286,9 @@ aws: [ERROR]: An error occurred (InvalidRequestException) when calling the GetWo
 
 Additional error details:
 AthenaErrorCode: INVALID_INPUT
+
+=== Verificación posterior (2026-11-12T11:53:51Z) ===
+Nota: el destroy elimina 7 recursos porque los marcadores entregas/ y resultados-athena/ ya se habían borrado con aws s3 rm (ver vaciado_bucket.txt).
+
+aws: [ERROR]: An error occurred (404) when calling the HeadBucket operation: Not Found
+Bucket de-final-entregas-455958489632 no aparece en aws s3 ls: eliminado
