@@ -1,0 +1,4 @@
+2026-11-12 06:45:58          0 entregas/
+2026-11-12 06:46:31        313 entregas/fecha=2026-10-01/entregas.csv
+2026-11-12 06:46:33        313 entregas/fecha=2026-10-02/entregas.csv
+2026-11-12 06:48:28        323 entregas/fecha=2026-10-03/entregas.csv
