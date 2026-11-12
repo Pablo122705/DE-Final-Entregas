@@ -1,0 +1,297 @@
+data.aws_caller_identity.actual: Reading...
+data.aws_caller_identity.actual: Read complete after 0s [id=455958489632]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+
+Terraform will perform the following actions:
+
+  # aws_athena_workgroup.entregas will be created
+  + resource "aws_athena_workgroup" "entregas" {
+      + arn           = (known after apply)
+      + description   = "Workgroup del ejercicio de entregas"
+      + force_destroy = true
+      + id            = (known after apply)
+      + name          = "entregas-wg"
+      + state         = "ENABLED"
+      + tags_all      = {
+          + "curso"    = "ingenieria-de-datos-eia-2026-2"
+          + "proyecto" = "de-final-entregas"
+        }
+
+      + configuration {
+          + enforce_workgroup_configuration    = true
+          + publish_cloudwatch_metrics_enabled = false
+          + requester_pays_enabled             = false
+
+          + result_configuration {
+              + output_location = "s3://de-final-entregas-455958489632/resultados-athena/"
+
+              + encryption_configuration {
+                  + encryption_option = "SSE_S3"
+                }
+            }
+        }
+    }
+
+  # aws_glue_catalog_database.entregas will be created
+  + resource "aws_glue_catalog_database" "entregas" {
+      + arn          = (known after apply)
+      + catalog_id   = (known after apply)
+      + description  = "Base de datos del ejercicio de entregas (final Ingenieria de Datos)"
+      + id           = (known after apply)
+      + location_uri = (known after apply)
+      + name         = "entregas_db"
+      + tags_all     = {
+          + "curso"    = "ingenieria-de-datos-eia-2026-2"
+          + "proyecto" = "de-final-entregas"
+        }
+
+      + create_table_default_permission (known after apply)
+    }
+
+  # aws_glue_catalog_table.entregas will be created
+  + resource "aws_glue_catalog_table" "entregas" {
+      + arn           = (known after apply)
+      + catalog_id    = (known after apply)
+      + database_name = "entregas_db"
+      + description   = "Intentos de entrega en CSV, particionados por la carpeta fecha=yyyy-MM-dd"
+      + id            = (known after apply)
+      + name          = "entregas"
+      + parameters    = {
+          + "EXTERNAL"                       = "TRUE"
+          + "classification"                 = "csv"
+          + "projection.enabled"             = "true"
+          + "projection.fecha.format"        = "yyyy-MM-dd"
+          + "projection.fecha.interval"      = "1"
+          + "projection.fecha.interval.unit" = "DAYS"
+          + "projection.fecha.range"         = "2026-10-01,2026-10-03"
+          + "projection.fecha.type"          = "date"
+          + "skip.header.line.count"         = "1"
+          + "storage.location.template"      = "s3://de-final-entregas-455958489632/entregas/fecha=${fecha}/"
+        }
+      + table_type    = "EXTERNAL_TABLE"
+
+      + partition_index (known after apply)
+
+      + partition_keys {
+          + comment = "Tomada de la carpeta fecha=yyyy-MM-dd; no es columna del CSV"
+          + name    = "fecha"
+          + type    = "string"
+        }
+
+      + storage_descriptor {
+          + input_format  = "org.apache.hadoop.mapred.TextInputFormat"
+          + location      = "s3://de-final-entregas-455958489632/entregas/"
+          + output_format = "org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat"
+
+          + columns {
+              + name = "id_envio"
+              + type = "string"
+            }
+          + columns {
+              + name = "ciudad"
+              + type = "string"
+            }
+          + columns {
+              + name = "transportadora"
+              + type = "string"
+            }
+          + columns {
+              + name = "estado"
+              + type = "string"
+            }
+          + columns {
+              + name = "duracion_minutos"
+              + type = "int"
+            }
+
+          + ser_de_info {
+              + name                  = "csv-coma"
+              + parameters            = {
+                  + "field.delim"          = ","
+                  + "serialization.format" = ","
+                }
+              + serialization_library = "org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe"
+            }
+        }
+    }
+
+  # aws_s3_bucket.datos will be created
+  + resource "aws_s3_bucket" "datos" {
+      + acceleration_status         = (known after apply)
+      + acl                         = (known after apply)
+      + arn                         = (known after apply)
+      + bucket                      = "de-final-entregas-455958489632"
+      + bucket_domain_name          = (known after apply)
+      + bucket_prefix               = (known after apply)
+      + bucket_regional_domain_name = (known after apply)
+      + force_destroy               = true
+      + hosted_zone_id              = (known after apply)
+      + id                          = (known after apply)
+      + object_lock_enabled         = (known after apply)
+      + policy                      = (known after apply)
+      + region                      = (known after apply)
+      + request_payer               = (known after apply)
+      + tags_all                    = {
+          + "curso"    = "ingenieria-de-datos-eia-2026-2"
+          + "proyecto" = "de-final-entregas"
+        }
+      + website_domain              = (known after apply)
+      + website_endpoint            = (known after apply)
+
+      + cors_rule (known after apply)
+
+      + grant (known after apply)
+
+      + lifecycle_rule (known after apply)
+
+      + logging (known after apply)
+
+      + object_lock_configuration (known after apply)
+
+      + replication_configuration (known after apply)
+
+      + server_side_encryption_configuration (known after apply)
+
+      + versioning (known after apply)
+
+      + website (known after apply)
+    }
+
+  # aws_s3_bucket_ownership_controls.datos will be created
+  + resource "aws_s3_bucket_ownership_controls" "datos" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + object_ownership = "BucketOwnerEnforced"
+        }
+    }
+
+  # aws_s3_bucket_public_access_block.datos will be created
+  + resource "aws_s3_bucket_public_access_block" "datos" {
+      + block_public_acls       = true
+      + block_public_policy     = true
+      + bucket                  = (known after apply)
+      + id                      = (known after apply)
+      + ignore_public_acls      = true
+      + restrict_public_buckets = true
+    }
+
+  # aws_s3_bucket_server_side_encryption_configuration.datos will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "datos" {
+      + bucket = (known after apply)
+      + id     = (known after apply)
+
+      + rule {
+          + apply_server_side_encryption_by_default {
+              + sse_algorithm     = "AES256"
+                # (1 unchanged attribute hidden)
+            }
+        }
+    }
+
+  # aws_s3_object.prefijo_entregas will be created
+  + resource "aws_s3_object" "prefijo_entregas" {
+      + acl                    = (known after apply)
+      + arn                    = (known after apply)
+      + bucket                 = (known after apply)
+      + bucket_key_enabled     = (known after apply)
+      + checksum_crc32         = (known after apply)
+      + checksum_crc32c        = (known after apply)
+      + checksum_crc64nvme     = (known after apply)
+      + checksum_sha1          = (known after apply)
+      + checksum_sha256        = (known after apply)
+      + content_type           = (known after apply)
+      + etag                   = (known after apply)
+      + force_destroy          = false
+      + id                     = (known after apply)
+      + key                    = "entregas/"
+      + kms_key_id             = (known after apply)
+      + server_side_encryption = (known after apply)
+      + storage_class          = (known after apply)
+      + tags_all               = {
+          + "curso"    = "ingenieria-de-datos-eia-2026-2"
+          + "proyecto" = "de-final-entregas"
+        }
+      + version_id             = (known after apply)
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_s3_object.prefijo_resultados will be created
+  + resource "aws_s3_object" "prefijo_resultados" {
+      + acl                    = (known after apply)
+      + arn                    = (known after apply)
+      + bucket                 = (known after apply)
+      + bucket_key_enabled     = (known after apply)
+      + checksum_crc32         = (known after apply)
+      + checksum_crc32c        = (known after apply)
+      + checksum_crc64nvme     = (known after apply)
+      + checksum_sha1          = (known after apply)
+      + checksum_sha256        = (known after apply)
+      + content_type           = (known after apply)
+      + etag                   = (known after apply)
+      + force_destroy          = false
+      + id                     = (known after apply)
+      + key                    = "resultados-athena/"
+      + kms_key_id             = (known after apply)
+      + server_side_encryption = (known after apply)
+      + storage_class          = (known after apply)
+      + tags_all               = {
+          + "curso"    = "ingenieria-de-datos-eia-2026-2"
+          + "proyecto" = "de-final-entregas"
+        }
+      + version_id             = (known after apply)
+        # (1 unchanged attribute hidden)
+    }
+
+Plan: 9 to add, 0 to change, 0 to destroy.
+
+Changes to Outputs:
+  + base_datos                      = "entregas_db"
+  + bucket                          = "de-final-entregas-455958489632"
+  + bucket_arn                      = (known after apply)
+  + plantilla_ubicacion_particiones = "s3://de-final-entregas-455958489632/entregas/fecha=${fecha}/"
+  + rango_proyeccion                = "2026-10-01,2026-10-03"
+  + region                          = "us-east-1"
+  + tabla                           = "entregas"
+  + tabla_arn                       = (known after apply)
+  + ubicacion_datos                 = "s3://de-final-entregas-455958489632/entregas/"
+  + ubicacion_resultados_athena     = "s3://de-final-entregas-455958489632/resultados-athena/"
+  + workgroup                       = "entregas-wg"
+aws_glue_catalog_database.entregas: Creating...
+aws_s3_bucket.datos: Creating...
+aws_glue_catalog_database.entregas: Creation complete after 1s [id=455958489632:entregas_db]
+aws_glue_catalog_table.entregas: Creating...
+aws_glue_catalog_table.entregas: Creation complete after 1s [id=455958489632:entregas_db:entregas]
+aws_s3_bucket.datos: Creation complete after 3s [id=de-final-entregas-455958489632]
+aws_s3_bucket_ownership_controls.datos: Creating...
+aws_s3_bucket_public_access_block.datos: Creating...
+aws_s3_bucket_server_side_encryption_configuration.datos: Creating...
+aws_s3_object.prefijo_resultados: Creating...
+aws_s3_object.prefijo_entregas: Creating...
+aws_s3_bucket_public_access_block.datos: Creation complete after 0s [id=de-final-entregas-455958489632]
+aws_s3_object.prefijo_entregas: Creation complete after 0s [id=entregas/]
+aws_s3_object.prefijo_resultados: Creation complete after 0s [id=resultados-athena/]
+aws_athena_workgroup.entregas: Creating...
+aws_s3_bucket_ownership_controls.datos: Creation complete after 0s [id=de-final-entregas-455958489632]
+aws_s3_bucket_server_side_encryption_configuration.datos: Creation complete after 0s [id=de-final-entregas-455958489632]
+aws_athena_workgroup.entregas: Creation complete after 1s [id=entregas-wg]
+
+Apply complete! Resources: 9 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+base_datos = "entregas_db"
+bucket = "de-final-entregas-455958489632"
+bucket_arn = "arn:aws:s3:::de-final-entregas-455958489632"
+plantilla_ubicacion_particiones = "s3://de-final-entregas-455958489632/entregas/fecha=${fecha}/"
+rango_proyeccion = "2026-10-01,2026-10-03"
+region = "us-east-1"
+tabla = "entregas"
+tabla_arn = "arn:aws:glue:us-east-1:455958489632:table/entregas_db/entregas"
+ubicacion_datos = "s3://de-final-entregas-455958489632/entregas/"
+ubicacion_resultados_athena = "s3://de-final-entregas-455958489632/resultados-athena/"
+workgroup = "entregas-wg"

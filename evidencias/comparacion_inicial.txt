@@ -1,0 +1,5 @@
+Comparación de resultados de Athena con resultados_esperados/ - etapa inicial
+Fecha: 2026-11-12T11:46:48Z
+IGUAL      resultados/inicial/intentos_por_fecha_estado.csv == resultados_esperados/intentos_por_fecha_estado_inicial.csv
+IGUAL      resultados/inicial/porcentaje_exito_por_fecha_ciudad.csv == resultados_esperados/porcentaje_exito_por_fecha_ciudad_inicial.csv
+IGUAL      resultados/inicial/duracion_promedio_2026-10-02.csv == resultados_esperados/duracion_promedio_2026-10-02.csv
